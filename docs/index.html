@@ -18,7 +18,7 @@
 			<div class="row">
 				<div class="col-md-12">
 			        <h4><img src="./assets/gplogo.png"/>Module Documentation</h4>
-                                <h1><big>STREAM.DetectLeafGenes</big></h1>
+                                <h1><big>STREAM.DetectLabelSpecificMarkers</big></h1>
 				</div>
 			</div>
 		</div>
@@ -30,7 +30,7 @@
 <br/>
 <dl class="dl-horizontal">
 	<dt>LSID</dt>
-	<dd>urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00403</dd>
+	<dd>urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00407</dd>
 	<dt>Author(s)</dt>
 	<dd>Huidong Chen, Massachussets General Hospital, wrapped as a module by Ted Liefeld, Mesirov Lab, UCSD School of Medicine.</dd>
 	<dt>Contact(s)</dt>
@@ -46,11 +46,11 @@
 
 <p>STREAM (Single-cell Trajectories Reconstruction, Exploration And Mapping) is an interactive pipeline capable of disentangling and visualizing complex branching trajectories from both single-cell transcriptomic and epigenomic data.  Within GenePattern STREAM is implemented as a collection of modules that cover the entire STREAM processing pipeline to allow individual steps to be performed interactively for data exploration.</p>
 
-<p>STREAM.DetectLeafGenes is used to detect marker genes for each leaf branch.	</p>
+<p>STREAM.DetectLabelSpecificMarkers is used to detect cell population-specific markers. This is similar to leaf branch marker gene detection. Here instead of comparing the gene expression values between leaf branches, we compare the gene expression values between cell populations.</p>
 
 <h2>Algorithm</h2>
 <p>
-For each gene E we scale the gene expression values to [0,1]. Then we calculate the average gene expressions for all leaf branches. Based on the average expressions, we calculate the Z-scores of all leaf branches. If there is any leaf branch with an absolute Z-score greater than 1.5, then the leaf branch with the highest absolute Z-score value will be picked as the candidate leaf branch. Next, Kruskal–Wallis H-test is computed for all the leaf branches to test if a significant difference of gene expression median value between leaf branches exists. If it is significant (p-value < 0.01), then a post-hoc pairwise Conover’s test is computed for multiple comparisons of mean rank sums test between all leaf branches. If the p-values between the candidate leaf branch and the other leaf branches are all below the specified threshold (0.01), then the gene E will be considered as leaf gene of the candidate leaf branch.
+For each gene E we scale the gene expression values to [0,1]. Then we calculate the average gene expressions for all cell populations. Based on the average expressions, we calculate the Z-scores of all populations. If there is any population with an absolute Z-score greater than 1.5, then the population with the highest absolute Z-score value will be picked as the candidate cell population. Next, Kruskal–Wallis H-test is computed for all the cell populations to test if a significant difference of gene expression median value between cell populations exists. If it is significant (p-value < 0.01), then a post-hoc pairwise Conover’s test is computed for multiple comparisons of mean rank sums test between all cell populations. If the p-values between the candidate cell population and the other populations are all below the specified threshold (0.01), then the gene E will be considered as label specific marker gene of the candidate cell population.
 </p>
 
 <h2>References</h2>
@@ -71,11 +71,11 @@ For each gene E we scale the gene expression values to [0,1]. Then we calculate 
 <ol>
 	<li>&lt;output filename&gt;_stream_result.pkl<br/>
 	Output file in STREAM AnnData extended pickle (.pkl) file format suitable for passing to the next step of the STREAM analysis.</li>
-	<li>leaf_genes/leaf_genes.tsv<br/>
-        All the leaf genes from all branches.  Columns include z score, H statistic, H pvalue, <S#S#> p values. 
+	<li>marker_genes/marker_genes.tsv<br/>
+        All the marker genes from all populations.  Columns include z score, H statistic, H pvalue, <S#S#> p values. 
         </li>
-        <li>leaf_genes/leaf_genesS#_S#.tsv<br/>
-        The leaf genes for the specific  branching.  Columns include z score, H statistic, H pvalue, <S#S#> p values.
+        <li>marker_genes/marker_genesS#_S#.tsv<br/>
+        The marker genes for the specific population.  Columns include z score, H statistic, H pvalue, <S#S#> p values.
         </li>
 
 </ol>
@@ -136,7 +136,7 @@ Ref: Nestorowa, S. et al. <a href="https://www.ncbi.nlm.nih.gov/pubmed/27365425"
                 </tr>
                 <tr>
                         <td> cutoff zscore*  </td>
-                        <td> The z-score cutoff used for mean values of all leaf branches.  </td>
+                        <td> The z-score cutoff used for mean values of all cell populations.  </td>
                 </tr>
                 <tr>
                         <td> cutoff pvalue  </td>
