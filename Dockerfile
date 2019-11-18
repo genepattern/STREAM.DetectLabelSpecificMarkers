@@ -1,6 +1,6 @@
-FROM pinellolab/stream:0.3.8
+FROM pinellolab/stream:latest
 
 RUN mkdir /stream
-COPY label_command_line.py /stream/label_command_line.py
+COPY labels_command_line.py /stream/labels_command_line.py
 
 ENTRYPOINT []

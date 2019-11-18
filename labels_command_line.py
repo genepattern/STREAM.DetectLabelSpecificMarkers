@@ -13,7 +13,7 @@ print('''
   \___ \   | |  |  _  /|  __|   / /\ \ | |\/| |
   ____) |  | |  | | \ \| |____ / ____ \| |  | |
  |_____/   |_|  |_|  \_\______/_/    \_\_|  |_|
-... detect leaf genes                                            
+... detect label specific marker  genes                                            
 ''',flush=True)
 
 import stream as st
@@ -48,8 +48,8 @@ def main():
     parser.add_argument("-cutoff_pvalue",dest="cutoff_pvalue", type=float, default=0.01, help="")
     parser.add_argument("-percentile_expr",dest="percentile_expr", type=int, default=95, help="")
     parser.add_argument("-flag_use_precomputed",dest="flag_use_precomputed", action="store_true", help="")
-    parser.add_argument("-root",dest="root", default=None, help="")
-    parser.add_argument("-preference",dest="preference", default=None, help="")
+    # parser.add_argument("-root",dest="root", default=None, help="")
+    # parser.add_argument("-preference",dest="preference", default=None, help="")
     parser.add_argument("-n_jobs",dest="n_jobs", type=int, default=8, help="")
 
     args = parser.parse_args()
@@ -57,12 +57,15 @@ def main():
     workdir = "./"
 
     adata = st.read(file_name=args.input_filename, file_format='pkl', experiment='rna-seq', workdir=workdir)
-    preference = args.preference.split(',')
-    print(preference)
-    st.detect_leaf_genes(adata,cutoff_zscore=args.cutoff_zscore,cutoff_pvalue=args.cutoff_pvalue,percentile_expr=args.percentile_expr, n_jobs=args.n_jobs,
-                     use_precomputed=args.flag_use_precomputed, root=args.root,preference=preference)
-    adata.uns['leaf_genes_all']
+    # preference = args.preference.split(',')
+    
+    # st.detect_leaf_genes(adata,cutoff_zscore=args.cutoff_zscore,cutoff_pvalue=args.cutoff_pvalue,percentile_expr=args.percentile_expr, n_jobs=args.n_jobs, use_precomputed=args.flag_use_precomputed, root=args.root,preference=preference)
+    # adata.uns['leaf_genes_all']
+    
+    st.find_marker(adata,ident='label',cutoff_zscore=args.cutoff_zscore, cutoff_pvalue=args.cutoff_pvalue, percentile_expr=args.percentile_expr,n_jobs=args.n_jobs, use_precomputed=args.flag_use_precomputed)
+    adata.uns['markers_label_all']
    
+
     st.write(adata,file_name=(args.output_filename_prefix + '_stream_result.pkl'),file_path='./',file_format='pkl') 
 
     print('Finished computation.')
